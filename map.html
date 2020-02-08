@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map-canvas { height: 100% }
+    </style>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=<yourapikey>&sensor=true">
+    </script>
+    <script type="text/javascript">
+        function getMyLocation(){
+            console.log('Entering getMyLocation');
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(displayCurrentLocation, displayError, {
+                    maximumAge: 3000, 
+                    timeout: 5000, 
+                    enableHighAccuracy: true 
+                });
+            }
+            console.log('Exiting getMyLocation');
+        }
+        function displayCurrentLocation(position){
+            console.log('Entering getCurrentLocation ' );
+            console.log(position.coords);
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            var mapOptions = {
+                center: new google.maps.LatLng(lat, lng),
+                zoom: 8
+            };
+            var map = new google.maps.Map(document.getElementById("map-canvas"),
+            mapOptions);
+            var latLng = new google.maps.LatLng(lat, lng);
+            var marker = new google.maps.Marker({
+                            position: latLng,
+                            map: map,
+                            title: 'Current location'
+                        });
+            marker.setMap(map);
+            console.log('Exiting getCurrentLocation');
+            
+        }
+        function displayError(error){
+            console.log('Error in getting location');
+            console.log(error);
+        }
+      google.maps.event.addDomListener(window, 'load', getMyLocation);
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"/>
+  </body>
+</html>
